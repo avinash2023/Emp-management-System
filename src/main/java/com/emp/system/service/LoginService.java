@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface LoginService {
-    public String login(LoginDto loginDto);
+    public String login(LoginDto loginDto) throws Exception;
 }

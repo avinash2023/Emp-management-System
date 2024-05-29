@@ -3,6 +3,12 @@ package com.emp.system.model;
 public class LoginDto {
     String employeeId;
     String password;
+
+    public LoginDto(String employeeId, String password) {
+        this.employeeId = employeeId;
+        this.password = password;
+    }
+
     public String getEmployeeId(){
         return employeeId;
     }
