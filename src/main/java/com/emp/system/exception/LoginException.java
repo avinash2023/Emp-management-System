@@ -1,6 +1,7 @@
 package com.emp.system.exception;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class LoginException extends Exception{
     private String message;
     private int statusCode;
+    @Getter
     private String title;
 
     public LoginException(String message, String title){

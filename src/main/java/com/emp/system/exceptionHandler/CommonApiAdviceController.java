@@ -2,26 +2,27 @@ package com.emp.system.exceptionHandler;
 
 
 import com.emp.system.exception.CommonException;
+import com.emp.system.exception.LoginException;
+import com.emp.system.exception.LoginExceptionResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
+import com.emp.system.exception.ErrorResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 @RestController
 public class CommonApiAdviceController extends ResponseEntityExceptionHandler {
-    private static final Logger log = (Logger) LoggerFactory.getLogger(CommonApiAdviceController.class);
+    private static final Logger log = LoggerFactory.getLogger(CommonApiAdviceController.class);
+
 
     /**
      * Handler method for CommonException.
@@ -34,6 +35,14 @@ public class CommonApiAdviceController extends ResponseEntityExceptionHandler {
         ErrorResponse  response = getErrorResponse(exception.getStatus(), Arrays.asList(exception.getMessage()).stream().collect(Collectors.toSet()));
         response.setErrorSection(exception.getErrorSection() !=null ? exception.getErrorSection() : "");
         return new ResponseEntity<>(response, null, response.getStatus().value());
+    }
+
+    @ExceptionHandler(LoginException.class)
+    public ResponseEntity<ErrorResponse> handleLoginException(HttpServletRequest request, LoginException exception){
+        LoginExceptionResponse loginExceptionResponse = new LoginExceptionResponse();
+        loginExceptionResponse.setErrors(Arrays.asList(exception.getMessage()).stream().collect(Collectors.toSet()));
+        loginExceptionResponse.setErrorTitle(exception.getTitle());
+        return new ResponseEntity<>(loginExceptionResponse, null, HttpStatus.UNAUTHORIZED.value());
     }
 
     private ErrorResponse getErrorResponse(HttpStatus status, Set<String> errors){

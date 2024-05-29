@@ -1,5 +1,4 @@
 package com.emp.system.exception;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
