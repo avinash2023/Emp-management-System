@@ -10,13 +10,13 @@ import java.util.List;
 import com.emp.system.model.User;
 
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/welcome")
 public class HomeController {
 
     @Autowired
     UserService userService;
 
-    @GetMapping("/user")
+    @GetMapping("/home")
     public List<User> getUser(){
         return userService.getUser();
     }
