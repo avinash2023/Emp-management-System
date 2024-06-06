@@ -1,5 +1,6 @@
 package com.emp.system.controller;
 
+import com.emp.system.model.ApiResponse;
 import com.emp.system.model.LoginDto;
 import com.emp.system.service.LoginService;
 import jakarta.validation.Valid;
@@ -20,8 +21,8 @@ public class LoginController {
     LoginService loginService;
 
     @PostMapping(value="/login")
-    public ResponseEntity<String> login( LoginDto loginDto) throws Exception{
-        String response=loginService.login(loginDto);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<ApiResponse<String>> login(LoginDto loginDto) throws Exception{
+        ApiResponse<String> response=loginService.login(loginDto);
+        return new ResponseEntity<>(response, response.getStatus());
     }
 }
