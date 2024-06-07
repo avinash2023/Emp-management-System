@@ -44,7 +44,7 @@ public class ManageEmployeeServiceImpl implements ManageEmployeeService {
     public ApiResponse<EmployeeDetailRequest> saveEmployeeDetails(EmployeeDetailRequest employeeDetailRequest) {
         ApiResponse<EmployeeDetailRequest> response = new ApiResponse<>();
 
-        EmployeeDetailsEntity employeeDetailsEntity=manageEmployeeRepository.findById(UUID.fromString(employeeDetailRequest.getEmployeeId()))
+        EmployeeDetailsEntity employeeDetailsEntity=manageEmployeeRepository.findByEmployeeId(employeeDetailRequest.getEmployeeId());
         employeeDetailsEntity.setEmployeeName(employeeDetailRequest.getEmployeeName());
         employeeDetailsEntity.setEmployeeEmail(employeeDetailRequest.getEmployeeEmail());
         response.setData(employeeDetailRequest);
