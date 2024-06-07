@@ -1,10 +1,13 @@
 package com.emp.system.controller;
 
 import com.emp.system.jwt.JwtHelper;
+import com.emp.system.model.ApiResponse;
 import com.emp.system.model.LoginRequest;
 import com.emp.system.model.LoginResponse;
+import com.emp.system.service.LoginAuthenticationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,34 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class LoginAuthenticationController {
 
-    private UserDetailsService userDetailsService;
-
-    private AuthenticationManager manager;
-
-    private JwtHelper helper;
+    @Autowired
+    LoginAuthenticationService loginAuthenticationService;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-
-        this.doAuthenticate(request.getUserName(), request.getPassword());
-
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUserName());
-        String token = this.helper.generateToken(userDetails);
-
-        LoginResponse response = LoginResponse.builder()
-                .token(token)
-                .userName(userDetails.getUsername()).build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
+        ApiResponse<LoginResponse> response=loginAuthenticationService.login(request);
+        return new ResponseEntity<>(response,response.getStatus());
     }
-
-    private void doAuthenticate(String email, String password) {
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
-        try {
-            manager.authenticate(authentication);
-        } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Credentials Invalid !!");
         }
-
-    }
-}
