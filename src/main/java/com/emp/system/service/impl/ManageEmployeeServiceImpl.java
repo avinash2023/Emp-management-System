@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,24 +37,46 @@ public class ManageEmployeeServiceImpl implements ManageEmployeeService {
     }
 
     @Override
-    public ApiResponse<EmployeeDetailRequest> updateEmployeeDetails(EmployeeDetailRequest employeeDetailRequest) {
+    public ApiResponse<EmployeeDetailRequest> saveEmployeeDetails(EmployeeDetailRequest employeeDetailRequest) {
         ApiResponse<EmployeeDetailRequest> response = new ApiResponse<>();
 
         EmployeeDetailsEntity employeeDetailsEntity=new EmployeeDetailsEntity();
         employeeDetailsEntity.setEmployeeName(employeeDetailRequest.getEmployeeName());
         employeeDetailsEntity.setEmployeeEmail(employeeDetailRequest.getEmployeeEmail());
         response.setData(employeeDetailRequest);
+        manageEmployeeRepository.save(employeeDetailsEntity);
         return response;
     }
 
     @Override
-    public ApiResponse<EmployeeDetailRequest> saveEmployeeDetails(EmployeeDetailRequest employeeDetailRequest) {
+    public ApiResponse<List<EmployeeDetailResponse>> getAllEmployeeDetails() {
+        ApiResponse<List<EmployeeDetailResponse>> response=new ApiResponse<>();
+        List<EmployeeDetailResponse> employeeDetailResponses=new ArrayList<>();
+        List<EmployeeDetailsEntity> employeeDetailsEntityList = manageEmployeeRepository.findAll();
+        for(EmployeeDetailsEntity employeeDetails:employeeDetailsEntityList){
+            EmployeeDetailResponse employeeDetailResponse=new EmployeeDetailResponse();
+            employeeDetailResponse.setEmployeeEmail(employeeDetails.getEmployeeEmail());
+            employeeDetailResponse.setEmployeeId(String.valueOf(employeeDetails.getEmployeeId()));
+            employeeDetailResponse.setEmployeeRole(employeeDetails.getEmployeeRole());
+            employeeDetailResponses.add(employeeDetailResponse);
+        }
+
+        response.setData(employeeDetailResponses);
+        return response;
+    }
+
+    @Override
+    public ApiResponse<EmployeeDetailRequest> updateEmployeeDetails(EmployeeDetailRequest employeeDetailRequest) throws CommonException{
         ApiResponse<EmployeeDetailRequest> response = new ApiResponse<>();
 
         EmployeeDetailsEntity employeeDetailsEntity=manageEmployeeRepository.findByEmployeeId(UUID.fromString(employeeDetailRequest.getEmployeeId()));
+        if(employeeDetailsEntity==null){
+            throw new CommonException("Id not found", HttpStatus.BAD_REQUEST);
+        }
         employeeDetailsEntity.setEmployeeName(employeeDetailRequest.getEmployeeName());
         employeeDetailsEntity.setEmployeeEmail(employeeDetailRequest.getEmployeeEmail());
         response.setData(employeeDetailRequest);
+        manageEmployeeRepository.save(employeeDetailsEntity);
         return response;
     }
 }

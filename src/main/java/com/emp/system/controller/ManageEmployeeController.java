@@ -7,10 +7,9 @@ import com.emp.system.model.EmployeeDetailResponse;
 import com.emp.system.service.ManageEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value="/employee")
@@ -24,14 +23,19 @@ public class ManageEmployeeController {
         ApiResponse<EmployeeDetailResponse> response= manageEmployeeService.getEmployeeDetails(employeeId);
         return new ResponseEntity<>(response,response.getStatus());
     }
+    @GetMapping(value="/getAllEmployee")
+    public ResponseEntity<ApiResponse<List<EmployeeDetailResponse>>> getAllEmployeeDetails()throws CommonException {
+        ApiResponse<List<EmployeeDetailResponse>> response= manageEmployeeService.getAllEmployeeDetails();
+        return new ResponseEntity<>(response,response.getStatus());
+    }
 
-    @GetMapping(value="/updateEmployee")
-    public ResponseEntity<ApiResponse<EmployeeDetailRequest>> updateEmployeeDetails(EmployeeDetailRequest employeeDetailRequest){
+    @PutMapping(value="/updateEmployee")
+    public ResponseEntity<ApiResponse<EmployeeDetailRequest>> updateEmployeeDetails(@RequestBody EmployeeDetailRequest employeeDetailRequest) throws CommonException{
         ApiResponse<EmployeeDetailRequest> response= manageEmployeeService.updateEmployeeDetails(employeeDetailRequest);
         return new ResponseEntity<>(response,response.getStatus());
     }
-    @GetMapping(value="/saveEmployee")
-    public ResponseEntity<ApiResponse<EmployeeDetailRequest>> saveEmployeeDetails(EmployeeDetailRequest  employeeDetailRequest){
+    @PostMapping(value="/saveEmployee")
+    public ResponseEntity<ApiResponse<EmployeeDetailRequest>> saveEmployeeDetails(@RequestBody EmployeeDetailRequest  employeeDetailRequest){
         ApiResponse<EmployeeDetailRequest> response= manageEmployeeService.saveEmployeeDetails(employeeDetailRequest);
         return new ResponseEntity<>(response,response.getStatus());
     }
