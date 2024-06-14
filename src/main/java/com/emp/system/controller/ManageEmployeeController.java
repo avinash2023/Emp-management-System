@@ -1,5 +1,6 @@
 package com.emp.system.controller;
 
+import com.emp.system.exception.CommonException;
 import com.emp.system.model.ApiResponse;
 import com.emp.system.model.EmployeeDetailRequest;
 import com.emp.system.model.EmployeeDetailResponse;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,7 +20,7 @@ public class ManageEmployeeController {
     ManageEmployeeService manageEmployeeService;
 
     @GetMapping(value="/getEmployee")
-    public ResponseEntity<ApiResponse<EmployeeDetailResponse>> getEmployeeDetails(String employeeId){
+    public ResponseEntity<ApiResponse<EmployeeDetailResponse>> getEmployeeDetails(@RequestParam(required = false) String employeeId)throws CommonException {
         ApiResponse<EmployeeDetailResponse> response= manageEmployeeService.getEmployeeDetails(employeeId);
         return new ResponseEntity<>(response,response.getStatus());
     }
