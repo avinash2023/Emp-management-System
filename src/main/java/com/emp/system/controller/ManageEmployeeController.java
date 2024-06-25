@@ -4,6 +4,7 @@ import com.emp.system.exception.CommonException;
 import com.emp.system.model.ApiResponse;
 import com.emp.system.model.EmployeeDetailRequest;
 import com.emp.system.model.EmployeeDetailResponse;
+import com.emp.system.model.ResignEmployeeRequest;
 import com.emp.system.service.ManageEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,11 @@ public class ManageEmployeeController {
     public ResponseEntity<ApiResponse<EmployeeDetailRequest>> saveEmployeeDetails(@RequestBody EmployeeDetailRequest  employeeDetailRequest){
         ApiResponse<EmployeeDetailRequest> response= manageEmployeeService.saveEmployeeDetails(employeeDetailRequest);
         return new ResponseEntity<>(response,response.getStatus());
-    }
 
+    }
+    @PutMapping(value="/resignEmployee")
+    public ResponseEntity<ApiResponse<ResignEmployeeRequest>> resignEmployee(@RequestBody ResignEmployeeRequest resignEmployeeRequest) throws CommonException {
+        ApiResponse<ResignEmployeeRequest> response = manageEmployeeService.resignEmployee(resignEmployeeRequest);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
 }

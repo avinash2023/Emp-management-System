@@ -5,6 +5,7 @@ import com.emp.system.exception.CommonException;
 import com.emp.system.model.ApiResponse;
 import com.emp.system.model.EmployeeDetailRequest;
 import com.emp.system.model.EmployeeDetailResponse;
+import com.emp.system.model.ResignEmployeeRequest;
 import com.emp.system.repository.ManageEmployeeRepository;
 import com.emp.system.service.ManageEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ public class ManageEmployeeServiceImpl implements ManageEmployeeService {
     }
 
     @Override
+//    @Audit(Employee="Employee",Action="Add")
     public ApiResponse<EmployeeDetailRequest> saveEmployeeDetails(EmployeeDetailRequest employeeDetailRequest) {
         ApiResponse<EmployeeDetailRequest> response = new ApiResponse<>();
 
@@ -66,6 +68,21 @@ public class ManageEmployeeServiceImpl implements ManageEmployeeService {
     }
 
     @Override
+    public ApiResponse<ResignEmployeeRequest> resignEmployee(ResignEmployeeRequest resignEmployeeRequest) throws CommonException{
+        ApiResponse<ResignEmployeeRequest> response = new ApiResponse<>();
+
+        EmployeeDetailsEntity employeeDetailsEntity=manageEmployeeRepository.findByEmployeeId(UUID.fromString(resignEmployeeRequest.getId()));
+        if(employeeDetailsEntity==null){
+            throw new CommonException("Id not found", HttpStatus.BAD_REQUEST);
+        }
+        employeeDetailsEntity.setEmployeeStatus(resignEmployeeRequest.getEmployeeStatus());
+        response.setData(resignEmployeeRequest);
+        manageEmployeeRepository.save(employeeDetailsEntity);
+        return response;
+    }
+
+    @Override
+//    @Audit(Employee="Employee",Action="Update")
     public ApiResponse<EmployeeDetailRequest> updateEmployeeDetails(EmployeeDetailRequest employeeDetailRequest) throws CommonException{
         ApiResponse<EmployeeDetailRequest> response = new ApiResponse<>();
 
