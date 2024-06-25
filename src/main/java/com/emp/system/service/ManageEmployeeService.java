@@ -4,6 +4,7 @@ import com.emp.system.exception.CommonException;
 import com.emp.system.model.ApiResponse;
 import com.emp.system.model.EmployeeDetailRequest;
 import com.emp.system.model.EmployeeDetailResponse;
+import com.emp.system.model.ResignEmployeeRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface ManageEmployeeService {
     ApiResponse<EmployeeDetailRequest> saveEmployeeDetails(EmployeeDetailRequest employeeDetailRequest);
 
     ApiResponse<List<EmployeeDetailResponse>> getAllEmployeeDetails();
+
+    ApiResponse<ResignEmployeeRequest> resignEmployee(ResignEmployeeRequest resignEmployeeRequest) throws CommonException;
 }
